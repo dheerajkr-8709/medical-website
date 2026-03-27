@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Frontend build
+frontend/dist/
+
+# Backend build
+backend/dist/
+
+# Env
+.env
+.env.local
+
+# Vercel
+.vercel
+
+# Misc
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
