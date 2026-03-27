@@ -1,0 +1,135 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Phone, Mail, MapPin, MessageCircle, Clock, Send, PhoneCall } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+
+const Contact = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    toast.success("Message sent! We'll contact you shortly.");
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 pb-20 pt-10 px-4 md:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16 space-y-4">
+           <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
+              Available 24/7
+           </div>
+           <h1 className="text-4xl md:text-6xl font-black text-slate-900 italic tracking-tight uppercase leading-none">
+              Get in <span className="text-emerald-500 not-italic border-b-8 border-emerald-500/10">Touch</span>
+           </h1>
+           <p className="text-slate-400 font-bold text-sm tracking-widest uppercase">We're here to help you</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+           
+           {/* Info Cards Column */}
+           <div className="space-y-6">
+              <div className="bg-white p-8 rounded-[3rem] shadow-xl shadow-slate-900/5 border border-slate-100 flex items-center gap-6 group hover:border-emerald-200 transition-all">
+                 <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-lg shadow-emerald-500/10">
+                    <Phone size={28} />
+                 </div>
+                 <div>
+                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Call Us Directly</h4>
+                    <p className="text-xl font-black text-slate-800">+91 91137 66681</p>
+                 </div>
+                 <a href="tel:+919113766681" className="ml-auto bg-slate-900 text-white p-3 rounded-xl hover:bg-emerald-600 transition-all active:scale-95"><PhoneCall size={20} /></a>
+              </div>
+
+              <div className="bg-white p-8 rounded-[3rem] shadow-xl shadow-slate-900/5 border border-slate-100 flex items-center gap-6 group hover:border-blue-200 transition-all">
+                 <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all shadow-lg shadow-blue-500/10">
+                    <Mail size={28} />
+                 </div>
+                 <div>
+                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Send Email</h4>
+                    <p className="text-xl font-black text-slate-800">info@shreeram.com</p>
+                 </div>
+              </div>
+
+              <div className="bg-white p-8 rounded-[3rem] shadow-xl shadow-slate-900/5 border border-slate-100 flex items-center gap-6 group hover:border-rose-200 transition-all">
+                 <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all shadow-lg shadow-rose-500/10">
+                    <MapPin size={28} />
+                 </div>
+                 <div>
+                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Shop Address</h4>
+                    <p className="text-sm font-black text-slate-800 line-clamp-2">Madhopur Sultanpur, Runnisaidpur, Bihar - 843328</p>
+                 </div>
+              </div>
+
+              <div className="bg-slate-900 p-10 rounded-[4rem] relative overflow-hidden group">
+                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-16 -mt-16" />
+                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="space-y-4 text-center md:text-left">
+                       <h3 className="text-white text-3xl font-black italic tracking-tight">Rapid Support <br /> <span className="text-emerald-500">on WhatsApp</span></h3>
+                       <p className="text-slate-400 text-xs font-bold leading-relaxed">Direct connection to our head pharmacist in Runnisaidpur.</p>
+                    </div>
+                    <button 
+                      onClick={() => window.open('https://wa.me/919113766681', '_blank')}
+                      className="bg-[#25D366] text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-green-500/20 active:scale-95 transition-all flex items-center gap-3"
+                    >
+                       <MessageCircle size={20} fill="white" />
+                       Chat Now
+                    </button>
+                 </div>
+              </div>
+           </div>
+
+           {/* Contact Form Column */}
+           <div className="bg-white p-10 md:p-14 rounded-[4rem] shadow-2xl shadow-slate-900/5 border border-slate-100 border-2">
+              <h3 className="text-2xl font-black text-slate-900 mb-8 flex items-center gap-4 italic tracking-tight">
+                 <div className="w-1.5 h-10 bg-emerald-500 rounded-full" />
+                 Send us a <span className="text-emerald-500">Quick Message</span>
+              </h3>
+              
+              <form onSubmit={handleSubmit} className="space-y-6">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Full Name</label>
+                       <input 
+                         required
+                         placeholder="e.g. Dheeraj Roy" 
+                         className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white outline-none font-bold transition-all"
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Phone Number</label>
+                       <input 
+                         required
+                         placeholder="e.g. 91137 66681" 
+                         className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white outline-none font-bold transition-all"
+                       />
+                    </div>
+                 </div>
+                 <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Subject</label>
+                    <input 
+                      required
+                      placeholder="e.g. Medicine Inquiry" 
+                      className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white outline-none font-bold transition-all"
+                    />
+                 </div>
+                 <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Message Detail</label>
+                    <textarea 
+                      required
+                      rows={4}
+                      placeholder="How can we help you today?" 
+                      className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-4 focus:ring-emerald-500/10 focus:bg-white outline-none font-bold transition-all resize-none"
+                    />
+                 </div>
+                 
+                 <button type="submit" className="w-full bg-slate-900 hover:bg-emerald-600 text-white py-6 rounded-3xl font-black text-sm uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-4 group">
+                    <span>Send Inquiry</span>
+                    <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                 </button>
+              </form>
+           </div>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Contact;
