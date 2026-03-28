@@ -167,6 +167,17 @@ const Navbar = () => {
                <Link to="/orders" className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-emerald-600 transition-all active:scale-95">
                   {t('orders')}
                </Link>
+
+               <Link 
+                  to={isAuthenticated ? "/profile" : "/login"} 
+                  className={`flex items-center justify-center p-2.5 rounded-full transition-all active:scale-95 ${
+                    isAuthenticated 
+                    ? 'bg-emerald-100 text-emerald-600 border border-emerald-200 shadow-lg shadow-emerald-500/10' 
+                    : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200'
+                  }`}
+                >
+                   <User size={20} />
+                </Link>
             </div>
           </div>
 

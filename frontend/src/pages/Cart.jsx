@@ -87,10 +87,11 @@ const Cart = () => {
           <div className="lg:col-span-2 space-y-4">
             <AnimatePresence mode="popLayout">
               {cart.map((item, idx) => {
+                const itemId = item.medicineId || item._id || item.id;
                 const actualPrice = item.price * (1 - (item.discount || 0) / 100);
                 return (
                   <motion.div
-                    key={item.id}
+                    key={itemId}
                     layout
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -114,9 +115,9 @@ const Cart = () => {
 
                        <div className="mt-4 sm:mt-6 flex flex-wrap sm:flex-row items-center justify-center sm:justify-between gap-6">
                            <div className="flex items-center bg-slate-900 rounded-2xl p-1.5 shadow-lg group-hover:shadow-primary-500/20 transition-all">
-                              <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2 text-white hover:text-primary-400"><Minus size={20} /></button>
+                              <button onClick={() => updateQuantity(itemId, item.quantity - 1)} className="p-2 text-white hover:text-primary-400"><Minus size={20} /></button>
                               <span className="px-5 text-white text-sm font-black min-w-[3rem] text-center tracking-widest">{item.quantity}</span>
-                              <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="p-2 text-white hover:text-primary-400"><Plus size={20} /></button>
+                              <button onClick={() => updateQuantity(itemId, item.quantity + 1)} className="p-2 text-white hover:text-primary-400"><Plus size={20} /></button>
                            </div>
 
                            <div className="flex flex-col items-center sm:items-end">
@@ -126,7 +127,7 @@ const Cart = () => {
                        </div>
                     </div>
 
-                    <button onClick={() => handleRemove(item.id, item.name)} className="absolute top-4 right-4 sm:top-6 sm:right-6 p-3 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-2xl transition-all">
+                    <button onClick={() => handleRemove(itemId, item.name)} className="absolute top-4 right-4 sm:top-6 sm:right-6 p-3 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-2xl transition-all">
                        <Trash2 size={24} />
                     </button>
                   </motion.div>

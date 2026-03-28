@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import axios from 'axios';
 
 const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -29,25 +30,35 @@ const Login = () => {
     }, 1500);
   };
 
-  const handleVerifyOtp = (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
     if (otp !== '123456') {
       toast.error(lang === 'hi' ? 'अमान्य OTP' : 'Invalid OTP');
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-        const mockUser = {
-            name: 'Runnisaidpur Local User',
+    try {
+        const response = await axios.post('/api/users/login', {
             phone: phoneNumber,
-            address: 'Madhopur Sultanpur, Runnisaidpur',
-            role: 'user',
-            id: 'SRM-U-8521'
-        };
-        login(mockUser);
+            name: 'Runnisaidpur Local User', // In a real app, this would be collected from a registration form
+            address: { street: 'Madhopur Sultanpur', city: 'Runnisaidpur', state: 'Bihar', zip: '843328' }
+        });
+        
+        login(response.data);
         toast.success(lang === 'hi' ? 'श्री राम मेडिकल में आपका स्वागत है!' : 'Welcome Back to Shree Ram Medical!');
-        navigate('/');
-    }, 1500);
+        
+        // Check if admin and redirect accordingly
+        if (response.data.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+    } catch (error) {
+        console.error("Login verify error:", error);
+        toast.error(lang === 'hi' ? 'लॉगिन विफल रहा' : 'Login failed');
+    } finally {
+        setLoading(false);
+    }
   };
 
   return (

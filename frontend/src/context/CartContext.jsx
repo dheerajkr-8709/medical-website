@@ -1,41 +1,97 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
+  const { user, isAuthenticated } = useAuth();
   const [cart, setCart] = useState([]);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
-  const [distance, setDistance] = useState(null); // Mock distance in km
+  const [distance, setDistance] = useState(null); // km
+  const [loading, setLoading] = useState(false);
 
-  // Load cart from localStorage
-  useEffect(() => {
-    const savedCart = localStorage.getItem('srm-cart');
-    if (savedCart) setCart(JSON.parse(savedCart));
-  }, []);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Sync cart to localStorage
+  // Load backend cart on user login
   useEffect(() => {
-    localStorage.setItem('srm-cart', JSON.stringify(cart));
-  }, [cart]);
+    const fetchCart = async () => {
+      if (isAuthenticated && user?._id) {
+        setLoading(true);
+        try {
+          const { data } = await axios.get(`/api/users/${user._id}/cart`);
+          if (data && data.length > 0) {
+            setCart(data);
+          } else {
+            const savedCart = localStorage.getItem('srm-cart');
+            if (savedCart) {
+              const parsed = JSON.parse(savedCart);
+              setCart(parsed);
+              // We'll sync this specifically
+              await axios.post('/api/users/syncCart', { userId: user._id, cart: parsed });
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching backend cart:", error);
+          const savedCart = localStorage.getItem('srm-cart');
+          if (savedCart) setCart(JSON.parse(savedCart));
+        } finally {
+          setLoading(false);
+          setIsInitialized(true);
+        }
+      } else {
+        const savedCart = localStorage.getItem('srm-cart');
+        if (savedCart) setCart(JSON.parse(savedCart));
+        setIsInitialized(true);
+      }
+    };
+    fetchCart();
+  }, [isAuthenticated, user?._id]);
+
+  // Sync cart to backend/localStorage
+  const syncCartToBackend = useCallback(async (newCart) => {
+    localStorage.setItem('srm-cart', JSON.stringify(newCart));
+    if (isAuthenticated && user?._id && isInitialized) {
+      try {
+        await axios.post('/api/users/syncCart', { userId: user._id, cart: newCart });
+      } catch (error) {
+        console.error("Cart sync failed:", error);
+      }
+    }
+  }, [isAuthenticated, user?._id, isInitialized]);
+
+  useEffect(() => {
+    if (isInitialized) {
+      syncCartToBackend(cart);
+    }
+  }, [cart, isInitialized, syncCartToBackend]);
 
   const addToCart = (product, quantity = 1) => {
     setCart(prev => {
       const productId = product._id || product.id;
-      const existing = prev.find(item => (item._id || item.id) === productId);
-      if (existing) {
-        return prev.map(item => 
-          (item._id || item.id) === productId ? { ...item, quantity: item.quantity + quantity } : item
-        );
+      const existingIdx = prev.findIndex(item => (item._id || item.id || item.medicineId) === productId);
+      
+      let newCart;
+      if (existingIdx > -1) {
+        newCart = [...prev];
+        newCart[existingIdx] = { ...newCart[existingIdx], quantity: newCart[existingIdx].quantity + quantity };
+      } else {
+        newCart = [...prev, { 
+          ...product, 
+          medicineId: product._id || product.id, 
+          quantity 
+        }];
       }
-      return [...prev, { ...product, quantity }];
+      return newCart;
     });
+    toast.success(`${product.name} added to cart!`);
   };
 
   const removeFromCart = (id) => {
-    setCart(prev => prev.filter(item => (item._id || item.id) !== id));
+    setCart(prev => prev.filter(item => (item._id || item.id || item.medicineId) !== id));
   };
 
   const updateQuantity = (id, quantity) => {
@@ -43,17 +99,20 @@ export const CartProvider = ({ children }) => {
       removeFromCart(id);
       return;
     }
-    setCart(prev => prev.map(item => (item._id || item.id) === id ? { ...item, quantity } : item));
+    setCart(prev => prev.map(item => (item._id || item.id || item.medicineId) === id ? { ...item, quantity } : item));
   };
 
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem('srm-cart');
+  };
 
   const subtotal = cart.reduce((acc, item) => {
     const actualPrice = item.price * (1 - (item.discount || 0) / 100);
     return acc + (actualPrice * item.quantity);
   }, 0);
 
-  const deliveryFee = distance && distance > 5 ? 50 : 20; // Example logic
+  const deliveryFee = subtotal > 500 ? 0 : 40; // Free above 500
   const total = subtotal + (cart.length > 0 ? deliveryFee : 0);
 
   return (
@@ -69,7 +128,8 @@ export const CartProvider = ({ children }) => {
       deliveryAddress,
       setDeliveryAddress,
       distance,
-      setDistance
+      setDistance,
+      cartLoading: loading
     }}>
       {children}
     </CartContext.Provider>

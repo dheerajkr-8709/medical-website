@@ -23,10 +23,17 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-// Get all orders (Admin Only)
+// Get all orders (supports phone filter)
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await Order.find().sort({ createdAt: -1 });
+    const { phone } = req.query;
+    let query = {};
+    if (phone) {
+      query.phone = phone;
+    }
+    
+    console.log(`➡️ Fetching orders with query:`, JSON.stringify(query));
+    const orders = await Order.find(query).sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (err) {
     console.error("❌ Error fetching orders:", err);

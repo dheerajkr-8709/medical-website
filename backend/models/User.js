@@ -14,6 +14,17 @@ const userSchema = new mongoose.Schema({
     lat: { type: Number },
     lng: { type: Number },
   },
+  cart: [
+    {
+      medicineId: { type: mongoose.Schema.Types.ObjectId, ref: 'Medicine' },
+      quantity: { type: Number, default: 1 },
+      name: String,
+      price: Number,
+      image: String,
+      discount: Number,
+      category: String
+    }
+  ],
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   lastLogin: { type: Date, default: Date.now },
 }, { timestamps: true });

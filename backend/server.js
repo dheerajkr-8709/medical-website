@@ -43,12 +43,14 @@ const medicineRoutes = require('./routes/medicineRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Routes
 app.use('/api/medicines', medicineRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/prescriptions', prescriptionRoutes);
+app.use('/api/users', userRoutes);
 
 // Socket.io for real-time status updates
 io.on('connection', (socket) => {
