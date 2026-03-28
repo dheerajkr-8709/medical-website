@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getImageUrl } from '../config';
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, subtotal, deliveryFee, total, distance } = useCart();
@@ -98,7 +99,7 @@ const Cart = () => {
                     className="bg-white rounded-[2.5rem] p-6 flex flex-col sm:flex-row items-center gap-6 shadow-xl shadow-slate-900/5 relative group border border-transparent hover:border-primary-100 transition-all"
                   >
                     <div className="w-28 h-28 bg-slate-50 rounded-3xl flex items-center justify-center p-4 relative flex-shrink-0">
-                       <img src={item.image} alt={item.name} className="w-full h-full object-contain mix-blend-multiply drop-shadow-md group-hover:scale-110 transition-transform" />
+                       <img src={getImageUrl(item.image)} alt={item.name} className="w-full h-full object-contain mix-blend-multiply drop-shadow-md group-hover:scale-110 transition-transform" />
                        <div className="absolute -top-2 -left-2 bg-primary-500 text-white text-[10px] font-black px-3 py-1.5 rounded-xl shadow-lg border-2 border-white">
                           {lang === 'hi' ? 'सत्यापित' : 'Verified'}
                        </div>

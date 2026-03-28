@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getImageUrl } from '../config';
 
 const Checkout = () => {
   const { cart, total, deliveryFee, subtotal, setDistance, clearCart } = useCart();
@@ -282,7 +283,7 @@ const Checkout = () => {
                      {cart.map((item, idx) => (
                         <div key={idx} className="flex items-center gap-4">
                            <div className="w-12 h-12 bg-slate-50 rounded-xl flex-shrink-0 flex items-center justify-center">
-                              <img src={item.image} alt="" className="w-4/5 h-4/5 object-contain" />
+                              <img src={getImageUrl(item.image)} alt="" className="w-4/5 h-4/5 object-contain" />
                            </div>
                            <div className="flex-grow">
                               <div className="text-xs font-black text-slate-800 line-clamp-1">{item.name}</div>

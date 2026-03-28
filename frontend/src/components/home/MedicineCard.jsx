@@ -5,6 +5,7 @@ import { Plus, Minus, ShoppingCart, Heart, Star, ShoppingBag, ShieldCheck } from
 import { toast } from 'react-hot-toast';
 import { useCart } from '../../context/CartContext';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { getImageUrl } from '../../config';
 
 const MedicineCard = ({ product, layout = 'grid' }) => {
   const { addToCart, updateQuantity } = useCart();
@@ -60,7 +61,7 @@ const MedicineCard = ({ product, layout = 'grid' }) => {
         }`}
       >
         <motion.img
-          src={product?.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=400'}
+          src={getImageUrl(product?.image)}
           alt={product?.name}
           loading="lazy"
           onError={(e) => {

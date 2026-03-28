@@ -21,6 +21,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getImageUrl } from '../config';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -86,7 +87,7 @@ const ProductDetail = () => {
               className="bg-white rounded-[3rem] p-8 md:p-12 border border-slate-100 shadow-xl shadow-slate-900/5 relative group overflow-hidden"
             >
               <img 
-                src={activeImage} 
+                src={getImageUrl(activeImage)} 
                 className="w-full h-auto max-h-[400px] object-contain transition-transform duration-500 group-hover:scale-105" 
                 alt={product.name}
               />
@@ -105,7 +106,7 @@ const ProductDetail = () => {
                   onClick={() => setActiveImage(img)}
                   className={`w-20 h-20 rounded-2xl p-2 border-2 transition-all ${activeImage === img ? 'border-emerald-500 bg-emerald-50' : 'border-slate-100 bg-white hover:border-slate-200'}`}
                  >
-                   <img src={img} className="w-full h-full object-contain" />
+                   <img src={getImageUrl(img)} className="w-full h-full object-contain" />
                  </button>
                ))}
             </div>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, Package, Truck, CheckCircle2, MoreVertical, Search, Filter, Clock, MapPin, ChevronRight, LayoutGrid, RotateCcw, MessageSquare, Star, Zap, ShoppingBag, Eye, PhoneCall, AlertTriangle, ArrowUpRight, Activity, Phone } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { getImageUrl } from '../../config';
 
 const ManageOrders = () => {
   const [activeTab, setActiveTab] = useState('Active');
@@ -146,9 +147,9 @@ const ManageOrders = () => {
                  </div>
 
                  <div className="relative group overflow-hidden rounded-[2rem] border-4 border-slate-100 mb-6 h-64">
-                    <img src={pres.imageUrl} alt="Prescription" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 cursor-pointer" onClick={() => window.open(pres.imageUrl, '_blank')} />
+                    <img src={getImageUrl(pres.imageUrl)} alt="Prescription" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 cursor-pointer" onClick={() => window.open(getImageUrl(pres.imageUrl), '_blank')} />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
-                       <button onClick={() => window.open(pres.imageUrl, '_blank')} className="bg-white text-slate-900 px-6 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-2xl">View Full Image</button>
+                       <button onClick={() => window.open(getImageUrl(pres.imageUrl), '_blank')} className="bg-white text-slate-900 px-6 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-2xl">View Full Image</button>
                     </div>
                  </div>
 

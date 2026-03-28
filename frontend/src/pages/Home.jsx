@@ -275,6 +275,12 @@ const Home = () => {
               [1, 2, 3, 4].map(i => (
                 <div key={i} className="bg-slate-50 rounded-[2.5rem] p-5 animate-pulse h-80" />
               ))
+            ) : error ? (
+              <div className="col-span-full py-20 text-center bg-white rounded-[3rem] border-2 border-dashed border-slate-100 italic">
+                <AlertTriangle size={48} className="mx-auto text-amber-500 mb-4" />
+                <h3 className="text-xl font-black text-slate-800 uppercase tracking-widest">{error}</h3>
+                <p className="text-slate-400 font-bold text-xs mt-2 uppercase tracking-widest">{lang === 'hi' ? 'कृपया जाँचें कि आपका इंटरनेट काम कर रहा है या बाद में पुनः प्रयास करें।' : 'Please check your connection or try again later.'}</p>
+              </div>
             ) : featuredMedicines.map((med, idx) => (
               <MedicineCard key={med._id || idx} product={med} />
             ))}

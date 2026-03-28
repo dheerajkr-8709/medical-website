@@ -141,6 +141,13 @@ const Products = () => {
               </div>
             ))}
           </div>
+        ) : medicines.length === 0 && !loading && !searchTerm ? (
+          <div className="bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-slate-100">
+             <AlertTriangle size={64} className="mx-auto text-amber-500 mb-6" />
+             <h2 className="text-3xl font-black text-slate-800 uppercase italic">Connection Issue</h2>
+             <p className="text-slate-500 font-medium max-w-sm mx-auto mt-4">We are having trouble connecting to the medical inventory. Please check your internet or try again later.</p>
+             <button onClick={() => window.location.reload()} className="mt-8 bg-emerald-500 text-white px-8 py-4 rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 active:scale-95 transition-all">Retry Connection</button>
+          </div>
         ) : (
           <>
             <AnimatePresence mode="popLayout">
