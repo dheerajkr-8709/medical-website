@@ -31,7 +31,7 @@ const Terms = lazy(() => import('./pages/Terms'));
 const ReturnRefund = lazy(() => import('./pages/ReturnRefund'));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const AdminMedicines = lazy(() => import('./pages/admin/ManageMedicines'));
-const AdminOrders = lazy(() => import('./pages/admin/ManageOrders'));
+const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'));
 
 const BottomNav = lazy(() => import('./components/layout/BottomNav'));
 const FloatingWhatsApp = lazy(() => import('./components/layout/FloatingWhatsApp'));

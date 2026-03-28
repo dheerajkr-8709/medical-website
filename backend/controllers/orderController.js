@@ -23,21 +23,41 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-// Get all orders (Admin)
+// Get all orders (Admin Only)
 exports.getOrders = async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("❌ Error fetching orders:", err);
+    res.status(500).json({ message: "Could not fetch orders" });
   }
 };
 
-// Update status (Admin)
+// Update order status (Admin Only)
 exports.updateStatus = async (req, res) => {
   try {
-    const order = await Order.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
+    const { status } = req.body;
+    const allowedStatuses = ['Placed', 'Packed', 'Out for Delivery', 'Delivered', 'Cancelled'];
+    
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      req.params.id, 
+      { status }, 
+      { new: true }
+    );
+
     if (!order) return res.status(404).json({ message: 'Order not found' });
+    
+    // Broadcast status change via Socket.io
+    const io = req.app.get('socketio');
+    if (io) {
+      io.to(order._id.toString()).emit('orderStatusUpdated', order);
+    }
+    
     res.status(200).json(order);
   } catch (err) {
     res.status(400).json({ message: err.message });

@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const Prescription = require('../models/Prescription');
+const { adminAuth } = require('../middleware/auth');
 
 // Ensure directory exists
 const uploadDir = 'uploads/prescriptions';
@@ -72,7 +73,7 @@ router.post('/upload', upload.single('prescription'), async (req, res) => {
 
 // @route   GET api/prescriptions
 // @desc    Get all prescriptions (Admin)
-router.get('/', async (req, res) => {
+router.get('/', adminAuth, async (req, res) => {
   try {
     const prescriptions = await Prescription.find().sort({ createdAt: -1 });
     res.json(prescriptions);
@@ -83,7 +84,7 @@ router.get('/', async (req, res) => {
 
 // @route   PUT api/prescriptions/:id/status
 // @desc    Update prescription status
-router.put('/:id/status', async (req, res) => {
+router.put('/:id/status', adminAuth, async (req, res) => {
   try {
     const { status, notes } = req.body;
     const prescription = await Prescription.findByIdAndUpdate(

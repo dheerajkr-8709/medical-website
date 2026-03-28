@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { getImageUrl } from '../../config';
 
+const ADMIN_SECRET = 'shreeram-admin-2024';
+
 const ManageOrders = () => {
   const [activeTab, setActiveTab] = useState('Active');
   const [orders, setOrders] = useState([]);
@@ -15,8 +17,8 @@ const ManageOrders = () => {
   const fetchData = async () => {
     try {
       const [ordersRes, presRes] = await Promise.all([
-        axios.get('/api/orders'),
-        axios.get('/api/prescriptions')
+        axios.get('/api/orders', { headers: { 'x-admin-secret': ADMIN_SECRET } }),
+        axios.get('/api/prescriptions', { headers: { 'x-admin-secret': ADMIN_SECRET } })
       ]);
       
       const newOrders = ordersRes.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -52,7 +54,10 @@ const ManageOrders = () => {
 
     try {
       toast.loading("Updating status...", { id: 'update' });
-      await axios.put(`/api/orders/${id}/status`, { status: statuses[nextIndex] });
+      await axios.put(`/api/orders/${id}`, 
+        { status: statuses[nextIndex] },
+        { headers: { 'x-admin-secret': ADMIN_SECRET } }
+      );
       toast.success("Status updated!", { id: 'update' });
       fetchData();
     } catch (err) {
@@ -63,7 +68,10 @@ const ManageOrders = () => {
   const updatePresStatus = async (id, status) => {
     try {
       toast.loading("Updating...", { id: 'pres-update' });
-      await axios.put(`/api/prescriptions/${id}/status`, { status });
+      await axios.put(`/api/prescriptions/${id}/status`, 
+        { status },
+        { headers: { 'x-admin-secret': ADMIN_SECRET } }
+      );
       toast.success("Status updated!", { id: 'pres-update' });
       fetchData();
     } catch (err) {

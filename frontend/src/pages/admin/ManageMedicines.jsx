@@ -4,6 +4,8 @@ import { LayoutDashboard, Package, ShoppingCart, Users, TrendingUp, Plus, Search
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
+const ADMIN_SECRET = 'shreeram-admin-2024';
+
 const ManageMedicines = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,9 @@ const ManageMedicines = () => {
   const fetchMedicines = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/medicines');
+      const res = await axios.get('/api/medicines', {
+        headers: { 'x-admin-secret': ADMIN_SECRET }
+      });
       setMedicines(res.data);
     } catch (err) {
       console.error(err);
@@ -46,7 +50,9 @@ const ManageMedicines = () => {
         return;
     }
     try {
-      await axios.post('/api/medicines', newMedicine);
+      await axios.post('/api/medicines', newMedicine, {
+        headers: { 'x-admin-secret': ADMIN_SECRET }
+      });
       toast.success('Medicine added into system successfully!');
       setIsModalOpen(false);
       setNewMedicine({
@@ -62,7 +68,9 @@ const ManageMedicines = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to remove this medicine from inventory?')) {
       try {
-        await axios.delete(`/api/medicines/${id}`);
+        await axios.delete(`/api/medicines/${id}`, {
+          headers: { 'x-admin-secret': ADMIN_SECRET }
+        });
         toast.success('Inventory Updated: Medicine Removed');
         fetchMedicines();
       } catch (err) {

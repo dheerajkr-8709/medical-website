@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
+const { adminAuth } = require('../middleware/auth');
 
 // Guest orders don't need auth
 router.post('/', orderController.createOrder);
 
-// Admin endpoints (Simple admin gate, or no auth for now for speed as requested)
-router.get('/', orderController.getOrders);
-router.put('/:id/status', orderController.updateStatus);
+// Admin endpoints (Protected)
+router.get('/', adminAuth, orderController.getOrders);
+router.put('/:id', adminAuth, orderController.updateStatus);
 
 module.exports = router;
