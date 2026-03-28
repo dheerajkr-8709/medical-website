@@ -20,9 +20,12 @@ exports.getAllMedicines = async (req, res) => {
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
 
+    console.log("➡️ Fetching all medicines with query:", JSON.stringify(query));
     const medicines = await Medicine.find(query).sort({ createdAt: -1 });
+    console.log(`✅ Found ${medicines.length} medicines.`);
     res.status(200).json(medicines);
   } catch (error) {
+    console.error("❌ Controller Error:", error.message);
     res.status(500).json({ message: error.message });
   }
 };

@@ -139,7 +139,11 @@ const medicinesData = [
 
 const seedDB = async () => {
   try {
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/medical-shop';
+    const mongoUri = process.env.MONGO_URL;
+    if (!mongoUri) {
+      console.error("MONGO_URL is NOT defined! ❌");
+      process.exit(1);
+    }
     console.log('Using connection:', mongoUri);
     await mongoose.connect(mongoUri);
     console.log('MongoDB Connected for Seeding...');

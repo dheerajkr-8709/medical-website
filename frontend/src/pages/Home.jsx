@@ -126,6 +126,7 @@ const Home = () => {
       try {
         setLoading(true);
         const res = await axios.get('/api/medicines');
+        console.log("Fetched Medicines:", res.data);
         if (res.data && res.data.length > 0) {
           setFeaturedMedicines(res.data.slice(0, 8));
         }

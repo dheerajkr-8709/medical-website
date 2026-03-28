@@ -6,6 +6,11 @@ import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
+import axios from 'axios'
+import { API_BASE_URL } from './config'
+
+// Set backend URL for all API calls
+axios.defaults.baseURL = API_BASE_URL;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
